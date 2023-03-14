@@ -1,13 +1,23 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Button, Alert} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const ListItems = ({item}) => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
-        <Text style={styles.name}> Name: {item.name} </Text>
-        <Text style={styles.year}> Year: {item.year} </Text>
-        <Text style={styles.genre}> Genre: {item.genre} </Text>
+        <Text style={styles.name}> Post # {item.id} </Text>
+        <Text style={styles.year}> Title : {item.title} </Text>
+        <Button
+          title="Details"
+          onPress={() =>
+            navigation.navigate('Details', {
+              id: item.id,
+            })
+          }
+        />
       </View>
     </View>
   );
@@ -25,8 +35,8 @@ const styles = StyleSheet.create({
     borderColor: '#0000FF',
   },
   name: {
-    fontSize:20,
-    color: "#0047AB"
-  }
+    fontSize: 20,
+    color: '#0047AB',
+  },
 });
 export default ListItems;

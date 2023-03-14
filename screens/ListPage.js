@@ -1,92 +1,37 @@
-import React, {useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  FlatList,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
 import ListItems from '../components/ListItems';
 
 const ListPage = ({route, navigation}) => {
   const {name} = route.params;
 
-  const listOFItems = [
-    {
-        id: 1,
-        name: "Lorem Ipsum",
-        year: "2022",
-        genre: "Lorem"
-    },
-    {
-        id: 2,
-        name: "Ipsum Dolor",
-        year: "2021",
-        genre: "Dolor"
-    },
-    {
-        id: 3,
-        name: "Dolor Ipsum",
-        year: "2020",
-        genre: "Ipsum"
-    },
-    {
-        id: 4,
-        name: "Lorem Ipsum Dolor",
-        year: "2019",
-        genre: "Dolor"
-    },
-    {
-        id: 5,
-        name: "Ipsum Dolor Lorem",
-        year: "2022",
-        genre: "Dolor"
-    },
-    {
-        id: 6,
-        name: "Lorem Ipsum",
-        year: "2022",
-        genre: "Lorem"
-    },
-    {
-        id: 7,
-        name: "Ipsum Dolor",
-        year: "2021",
-        genre: "Dolor"
-    },
-    {
-        id: 8,
-        name: "Dolor Ipsum",
-        year: "2020",
-        genre: "Ipsum"
-    },
-    {
-        id: 9,
-        name: "Lorem Ipsum Dolor",
-        year: "2019",
-        genre: "Dolor"
-    },
-    {
-        id: 10,
-        name: "Ipsum Dolor Lorem",
-        year: "2022",
-        genre: "Dolor"
-    }
-  ]
+  const [posts, setPosts] = useState([]);
+ 
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts?_start=0&_limit=10')
+      .then(response => response.json())
+      .then(json => setPosts(json));
+
+  }, []);
+  // console.log(posts);
 
   return (
     <View style={styles.container}>
       <Text style={styles.mainHeader}> Welcome {name}! </Text>
-
       <Text style={styles.suggestionText}> Top 10 Suggestions for you</Text>
 
-      <FlatList data={listOFItems} renderItem={({item}) => {
-        return (
+      <FlatList
+        data={posts}
+        keyExtractor={(item) => item.id}
+        renderItem={({item}) => {
+          return (
             <View>
-           <ListItems item={item}/>
+              <ListItems item={item} />
             </View>
-        )
-      }}/>
+          );
+        }}
+      />
 
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <View style={styles.btnContainer}>
@@ -107,13 +52,13 @@ const styles = StyleSheet.create({
   mainHeader: {
     fontSize: 30,
     alignContent: 'center',
-    marginBottom:25
+    marginBottom: 25,
   },
   suggestionText: {
     fontSize: 25,
     // alignContent: 'center',
-    marginBottom:25,
-    color: "#0047AB"
+    marginBottom: 25,
+    color: '#0047AB',
   },
   btnContainer: {
     marginTop: 20,
