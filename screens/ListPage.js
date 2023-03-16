@@ -1,35 +1,64 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  FlatList,
+  TextInput,
+  Keyboard,
+} from 'react-native';
 import ListItems from '../components/ListItems';
 
 const ListPage = ({route, navigation}) => {
   const {name} = route.params;
 
   const [posts, setPosts] = useState([]);
- 
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts?_start=0&_limit=10')
+    fetch('https://jsonplaceholder.typicode.com/posts?_start=0&_limit=25')
       .then(response => response.json())
       .then(json => setPosts(json));
-
   }, []);
   // console.log(posts);
 
   return (
     <View style={styles.container}>
       <Text style={styles.mainHeader}> Welcome {name}! </Text>
-      <Text style={styles.suggestionText}> Top 10 Suggestions for you</Text>
+      <Text style={styles.suggestionText}> Top 10 posts for you</Text>
+
+      <View style={styles.userInput}>
+        <TextInput
+          autoCapitalize="none"
+          placeholder="search here.."
+          autoCorrect={false}
+          onChangeText={searchTerm => setSearch(searchTerm)}
+          value={search}
+        />
+      </View>
 
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={posts}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         renderItem={({item}) => {
-          return (
-            <View>
-              <ListItems item={item} />
-            </View>
-          );
+          if (search === '') {
+            return (
+              <View>
+                <ListItems item={item} />
+              </View>
+            );
+          }
+          if (item.title.toLowerCase().includes(search.toLocaleLowerCase()) ) {
+            return (
+              <View>
+                <ListItems item={item} />
+              </View>
+            );
+
+          }
+          
         }}
       />
 
@@ -48,6 +77,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingTop: 30,
     backgroundColor: '#fff',
+    display: 'flex',
+    alignItems: 'center',
   },
   mainHeader: {
     fontSize: 30,
@@ -56,7 +87,6 @@ const styles = StyleSheet.create({
   },
   suggestionText: {
     fontSize: 25,
-    // alignContent: 'center',
     marginBottom: 25,
     color: '#0047AB',
   },
@@ -66,12 +96,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     alignContent: 'center',
+    marginVertical: 30,
   },
   loginButton: {
     padding: 5,
     color: 'white',
     alignSelf: 'center',
     fontSize: 15,
+  },
+
+  userInput: {
+    borderRadius: 5,
+    borderColor: 'lightgrey',
+    borderWidth: 2,
+    fontSize: 18,
+    marginTop: 5,
+    width: '70%',
+    marginBottom: 10,
   },
 });
 export default ListPage;

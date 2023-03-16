@@ -10,14 +10,18 @@ const ListItems = ({item}) => {
       <View style={styles.container}>
         <Text style={styles.name}> Post # {item.id} </Text>
         <Text style={styles.year}> Title : {item.title} </Text>
+        <View style={styles.button}>
         <Button
-          title="Details"
+          title="Comments"
           onPress={() =>
             navigation.navigate('Details', {
               id: item.id,
             })
           }
+          
         />
+        </View>
+       
       </View>
     </View>
   );
@@ -38,5 +42,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#0047AB',
   },
+  button : {
+    padding: 5,
+    color: 'white',
+    alignSelf: 'center',
+    fontSize: 15,
+  }
 });
 export default ListItems;

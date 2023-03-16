@@ -75,12 +75,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#0047AB',
   },
-  commentContainer: {
-    // borderWidth: 1,
-    margin: 5,
+  commentContainer: {   
     padding:10,
-    borderBottomWidth : 5
-
+    borderBottomWidth : 0.25
   },
 });
 export default Details;
