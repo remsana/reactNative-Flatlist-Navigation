@@ -1,82 +1,61 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  Alert,
-} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text, View, Alert} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 
 const HomePage = ({navigation}) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [selectedValue, setSelectedValue] = useState('');
 
-  const handleLogin = () => {
-    console.log(`Username : ${username} + password : ${password}`);
-
-    if (username === 'remya' && password === 'test') {
-      Alert.alert(`Welcome ${username}!`);
-      navigation.navigate('List', {name:  `${username}`});
+  const login = () => {
+    if (selectedValue === 'company') {
+      Alert.alert(`Company selected`);
+      navigation.navigate('Login');
+    } else if (selectedValue === 'service') {
+      Alert.alert(`service selected`);
+      navigation.navigate('Login');
     } else {
-      Alert.alert('Incorrect username or password!');
+      Alert.alert(`nothing selected`);
+      navigation.navigate('Home');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.mainHeader}> Welcome! </Text>
-
-      <View style={styles.formContainer}>
-        <Text style={styles.formLabels}>Enter your username:</Text>
-        <TextInput
-          style={styles.userInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={username => setUsername(username)}
-          value={username}></TextInput>
-        <Text style={styles.formLabels}>Enter your password:</Text>
-        <TextInput
-          style={styles.userInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={password => setPassword(password)}
-          value={password}
-          secureTextEntry={true}></TextInput>
-        <TouchableOpacity onPress={() => handleLogin()}>
-          <View style={styles.btnContainer}>
-            <Text style={styles.loginButton}>Login</Text>
-          </View>
-        </TouchableOpacity>
+      <Text style={styles.mainHeader}>Welcome to the App!!</Text>
+      <Text style={styles.mainHeader}>Choose your organisation</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={selectedValue}
+          style={{height: 20, width: 300, color: 'black'}}
+          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
+          <Picker.Item label="Choose organisation" key={'unselectable'} value="default" />
+          <Picker.Item label="Company" value="company" />
+          <Picker.Item label="Service" value="service" />
+        </Picker>
       </View>
+
+      <TouchableOpacity onPress={() => login()}>
+        <View style={styles.btnContainer}>
+          <Text style={styles.loginButton}>Login</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    paddingHorizontal: 30,
-    paddingTop: 30,
-    backgroundColor: '#fff',
+    flex: 1,
+    paddingTop: 40,
+    alignItems: 'center',
   },
   mainHeader: {
-    fontSize: 30,
+    fontSize: 20,
     alignContent: 'center',
+    color: '#0047AB',
+    marginBottom: 15,
   },
-  formContainer: {
-    marginTop: 50,
-    paddingHorizontal: 10,
-  },
-  formLabels: {
-    marginTop: 10,
-  },
-  userInput: {
-    borderRadius: 5,
-    borderColor: 'lightgrey',
+  pickerContainer: {
     borderWidth: 1,
-    fontSize: 18,
-    marginTop: 5,
   },
   btnContainer: {
     marginTop: 20,
@@ -92,4 +71,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
+
 export default HomePage;
